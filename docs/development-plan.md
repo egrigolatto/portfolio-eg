@@ -177,9 +177,11 @@ Decided architecture (see AGENTS.md "Contact form and inbox panel"):
 - [x] First real project loaded (Split Expenses): data, bilingual copy and
       real screenshot captured from the live demo; placeholder projects and
       their images removed
+- [x] Remove secrets from `opencode.json`; `git init`; push to GitHub
+- [x] Vercel import + env vars (`DATABASE_URL`, `PANEL_*`,
+      `NEXT_PUBLIC_SITE_URL`); production E2E verified: form → Neon → inbox
+      login → read/delete → logout
 - [ ] More real projects as they ship
-- [ ] Remove secrets from `opencode.json`; `git init`; push to GitHub
-- [ ] Vercel import + Neon integration + `NEXT_PUBLIC_SITE_URL`
 - [ ] Student Developer Pack (apply early, it takes days): Namecheap free
       .ME → DNS to Vercel (`A 76.76.21.21`, `CNAME cname.vercel-dns.com`)
       → SSL + redirects → update site URL env
