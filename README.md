@@ -14,7 +14,10 @@ The project intentionally favors:
 - performance
 - maintainability
 
-No backend, database or authentication is required for the initial version.
+No backend or authentication: the site is fully static-friendly. The only
+server component is the minimal inbox described below (one Neon Postgres
+table and one private password-gated route). There is deliberately no
+general admin area.
 
 ## Inbox panel
 
@@ -91,15 +94,9 @@ pnpm build
 
 ## Deployment
 
-The portfolio is intended to be deployed on Vercel.
+The portfolio is deployed on Vercel.
 
-Before production, set the `NEXT_PUBLIC_SITE_URL` environment variable to the
-final domain (used for metadata base, Open Graph URLs and the sitemap).
-
-## Future work
-
-A future phase may add a private authenticated area for reviewing messages
-submitted through the contact form.
-
-That functionality is intentionally excluded from the initial UI
-implementation.
+The `NEXT_PUBLIC_SITE_URL` environment variable must be set to the final
+public domain (used for the metadata base, Open Graph URLs and the
+sitemap). Update it and redeploy when a custom domain replaces the
+`*.vercel.app` URL.

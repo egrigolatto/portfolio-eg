@@ -165,10 +165,7 @@ data in `lib/projects.ts`, descriptions and alt text localized in
 
 ## Contact form and inbox panel
 
-The contact form UI is complete. The next approved step is message
-persistence and a private review panel.
-
-Agreed architecture (keep it minimal):
+Implemented and shipped. Architecture (deliberately minimal):
 
 - Neon Serverless Postgres (free tier, via Vercel integration), single
   `messages` table, accessed with `@neondatabase/serverless` from
