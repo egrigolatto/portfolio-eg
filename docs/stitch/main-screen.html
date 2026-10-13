@@ -1,0 +1,381 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ALEX | Full Stack Developer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&amp;family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#283044",
+                        "tertiary-fixed": "#dae2fd",
+                        "surface-container": "#152031",
+                        "on-tertiary-fixed": "#131b2e",
+                        "inverse-primary": "#4d44e3",
+                        "outline-variant": "#464555",
+                        "surface-container-highest": "#2a3548",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "primary": "#c3c0ff",
+                        "outline": "#918fa1",
+                        "secondary": "#c1c7cf",
+                        "surface-container-high": "#1f2a3c",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-lowest": "#040e1f",
+                        "surface-bright": "#2f3a4c",
+                        "on-error": "#690005",
+                        "on-secondary": "#2b3137",
+                        "surface-tint": "#c3c0ff",
+                        "surface-variant": "#2a3548",
+                        "on-background": "#d8e3fb",
+                        "inverse-on-surface": "#263143",
+                        "tertiary-container": "#586076",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "surface-container-low": "#111c2d",
+                        "on-secondary-fixed": "#161c22",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#afb6bd",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "secondary-fixed": "#dde3eb",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#c1c7cf",
+                        "on-tertiary-container": "#d4dbf5",
+                        "on-primary-container": "#dad7ff",
+                        "primary-container": "#4f46e5",
+                        "on-surface-variant": "#c7c4d8",
+                        "on-primary": "#1d00a5",
+                        "secondary-container": "#41474e",
+                        "on-surface": "#d8e3fb",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-dim": "#081425",
+                        "primary-fixed": "#e2dfff",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#41474e",
+                        "background": "#081425",
+                        "inverse-surface": "#d8e3fb",
+                        "surface": "#081425",
+                        "tertiary": "#bec6e0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "margin-mobile": "20px",
+                        "stack-lg": "48px",
+                        "stack-sm": "12px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px",
+                        "stack-md": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Sora"],
+                        "display": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["30px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .shader-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen relative overflow-x-hidden antialiased">
+<div class="shader-bg">
+<canvas id="shader-canvas-ANIMATION_13" style="display:block;width:100%;height:100%" width="1280" height="1024"></canvas>
+<script>
+        (function() {
+          const canvas = document.getElementById('shader-canvas-ANIMATION_13');
+
+          // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+          // This fires on initial layout and whenever the element is resized.
+          function syncSize() {
+            const w = canvas.clientWidth  || 1280;
+            const h = canvas.clientHeight || 720;
+            if (canvas.width !== w || canvas.height !== h) {
+              canvas.width  = w;
+              canvas.height = h;
+            }
+          }
+          if (typeof ResizeObserver !== 'undefined') {
+            new ResizeObserver(syncSize).observe(canvas);
+          }
+          syncSize();
+
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (!gl) return;
+          const vs = `attribute vec2 a_position;
+        varying vec2 v_texCoord;
+        void main() {
+          v_texCoord = a_position * 0.5 + 0.5;
+          gl_Position = vec4(a_position, 0.0, 1.0);
+        }`;
+          const fs = `precision highp float;
+        varying vec2 v_texCoord;
+        uniform float u_time;
+        uniform vec2 u_resolution;
+
+        float noise(vec2 p) {
+            return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+        }
+
+        void main() {
+            vec2 uv = v_texCoord;
+            vec2 p = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+            
+            // Deep space base - neutral and dark
+            vec3 color = vec3(0.01, 0.02, 0.04); 
+            
+            // Subtle nebula glow - slow pulse
+            float glow = length(p * 0.4);
+            float glowPulse = 0.5 + 0.5 * sin(u_time * 0.15); // Slightly faster pulse
+            color += vec3(0.02, 0.01, 0.05) * (1.0 - smoothstep(0.0, 1.2, glow)) * glowPulse;
+            
+            // Star drift
+            vec2 driftUv = uv + vec2(u_time * 0.002, u_time * 0.001); // Slightly faster drift
+            
+            // Main stars - slightly more dense and active
+            float stars = noise(floor(driftUv * 450.0) / 450.0);
+            if (stars > 0.9985) { // Increased density (was 0.9995)
+                float blink = 0.5 + 0.5 * sin(u_time * 0.8 + stars * 100.0); // Faster, more noticeable blink
+                color += vec3(0.75, 0.85, 0.95) * blink;
+            }
+            
+            // Star dust - fine layer
+            float dust = noise(driftUv * 900.0);
+            if (dust > 0.9992) { // Increased density (was 0.9998)
+                color += vec3(0.4, 0.5, 0.6) * 0.3;
+            }
+
+            gl_FragColor = vec4(color, 1.0);
+        }`;
+          function cs(type, src) {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, src);
+            gl.compileShader(s);
+            return s;
+          }
+          const prog = gl.createProgram();
+          gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+          gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+          gl.linkProgram(prog);
+          gl.useProgram(prog);
+          const buf = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+          const pos = gl.getAttribLocation(prog, 'a_position');
+          gl.enableVertexAttribArray(pos);
+          gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+          const uTime = gl.getUniformLocation(prog, 'u_time');
+          const uRes = gl.getUniformLocation(prog, 'u_resolution');
+          const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+          // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+          // Shaders that need normalized coords should use: u_mouse / u_resolution.
+          let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+          window.addEventListener('mousemove', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            if (rect.width && rect.height) {
+              const nx = (event.clientX - rect.left) / rect.width;
+              const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+              mouse.x = nx * canvas.width;
+              mouse.y = ny * canvas.height;
+            }
+          });
+
+          function render(t) {
+            if (typeof ResizeObserver === 'undefined') syncSize();
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            if (uTime) gl.uniform1f(uTime, t * 0.001);
+            if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+            if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            requestAnimationFrame(render);
+          }
+          render(0);
+        })();
+        </script>
+</div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-transparent">
+<div class="flex justify-between items-center px-gutter py-6 max-w-container-max mx-auto">
+<div class="font-display text-body-lg font-bold text-on-surface tracking-widest uppercase">EG</div>
+<div class="hidden md:flex gap-stack-lg items-center font-label-caps text-label-caps tracking-widest text-on-surface font-bold">
+<a class="hover:text-primary transition-colors" href="#about">About</a>
+<a class="hover:text-primary transition-colors" href="#projects">Projects</a><a class="hover:text-primary transition-colors" href="#skills">Skills</a>
+<a class="hover:text-primary transition-colors" href="#contact">Contact</a>
+</div>
+<!-- Mobile Menu Placeholder -->
+<div class="md:hidden">
+<span class="material-symbols-outlined text-on-surface cursor-pointer">menu</span>
+</div>
+</div>
+</nav>
+<main class="relative z-10 w-full">
+<div class="pt-32 pb-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<!-- Hero Section -->
+<section class="min-h-[70vh] flex flex-col justify-center items-start gap-stack-lg" id="hero">
+<div class="space-y-stack-md w-full max-w-4xl">
+<h1 class="font-display text-6xl md:text-[100px] text-on-surface tracking-tighter leading-none font-bold">Emanuel Grigolatto</h1>
+<h2 class="font-display text-headline-md md:text-headline-lg text-primary font-light">Full Stack Developer</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant/80 max-w-2xl leading-relaxed mt-8">
+                    A developer interested in building thoughtful digital experiences and solving problems through technology.
+                </p>
+<div class="flex flex-wrap gap-stack-md mt-12">
+<a class="border border-primary text-primary font-label-caps text-label-caps px-8 py-4 hover:bg-primary hover:text-on-primary transition-all duration-300 tracking-widest" href="#contact">GET IN TOUCH</a>
+</div>
+</div>
+</section>
+</div>
+<div class="relative bg-[#03050a] w-full mt-12 pt-12 pb-24">
+<div class="absolute -top-48 left-0 w-full h-48 bg-gradient-to-b from-transparent to-[#03050a] pointer-events-none"></div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-48">
+<!-- About Section -->
+<section class="py-24 relative" id="about">
+<div class="max-w-3xl">
+<div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps tracking-widest mb-12">
+<span class="w-8 h-[1px] bg-outline-variant/50"></span>
+<span class="">ABOUT</span>
+</div>
+<p class="font-headline-md text-headline-md md:text-headline-lg text-on-surface leading-tight font-light">
+                    Interested in understanding how things work and continuously learning across the stack.
+                </p>
+</div>
+</section>
+<!-- Skills Section (Technical Toolkit) -->
+<section class="py-24 relative" id="projects"><div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps tracking-widest mb-16"><span class="w-8 h-[1px] bg-outline-variant/50"></span><span class="">PROJECTS</span></div><div class="space-y-24"><article class="group border-b border-outline-variant/10 pb-16 transition-colors hover:border-outline-variant/30"><div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"><div class="lg:col-span-6 overflow-hidden rounded-xl border border-white/10 bg-surface-container-lowest/50 shadow-2xl relative"><div class="aspect-video w-full overflow-hidden"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOIzb811xEB7eKAGlUD6UagU3xcK-YUwWEPMXj71ibtw8AF0-yPpEBmfce4dqzINCnQHhTSEKTLiZq7HH6wY0jE5bbA62aQwPtN0ty6755UkXi3wCMhCLAcUm7PLniGJHcA0Oh5VCdGMogq9KydAN-8L4F-n2xFea2Gie9_elzOlmQdZztb_6NxfkruxDYiCkSclzaR-xVQDWdFwf0iPFwN3BPGmisQhkyioO-b0G1tm7UTNjuIOBU" alt="Aether Engine WebGL celestial shader simulation interface preview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy"></div></div><div class="lg:col-span-6 flex flex-col justify-center space-y-6"><div class="space-y-3"><div class="flex items-center justify-between"><div class="flex items-center gap-4"><h3 class="font-display text-headline-md text-on-surface font-light group-hover:text-primary transition-colors">Aether Engine</h3><span class="font-label-caps text-[10px] text-on-surface-variant/50 tracking-widest">01</span></div><div class="flex items-center gap-6 font-label-caps text-label-caps tracking-widest shrink-0"><a class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 group/link" href="#" rel="noopener noreferrer"><span class="">LIVE DEMO</span><span class="material-symbols-outlined text-[16px] transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">north_east</span></a><a class="text-on-surface-variant/60 hover:text-primary transition-colors flex items-center gap-1 group/link" href="https://github.com" rel="noopener noreferrer" target="_blank"><span class="">SOURCE</span><span class="material-symbols-outlined text-[16px] transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">north_east</span></a></div></div><p class="font-body-md text-on-surface-variant/80 max-w-2xl leading-relaxed">Real-time WebGL shader synthesis platform providing interactive procedural celestial environments and deterministic physics simulation.</p></div><div class="flex flex-wrap gap-3 font-label-caps text-[10px] text-on-surface-variant/70 tracking-widest pt-2"><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">TypeScript</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">WebGL / GLSL</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">Web Audio API</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">Vite</span></div></div></div></article><article class="group border-b border-outline-variant/10 pb-16 transition-colors hover:border-outline-variant/30"><div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"><div class="lg:col-span-6 lg:order-2 overflow-hidden rounded-xl border border-white/10 bg-surface-container-lowest/50 shadow-2xl relative"><div class="aspect-video w-full overflow-hidden"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYsugbv9OmzHcnoLQATtlQ_GpQm9DkhdcfrlhH7m9Z3nxE3G64_muS90h0htrFm7j9c3USAkGGh6iKe_-Yk7YQ-MyyjH9o0PWWM3E15_rRZKnxe4axpn96o6uOckp8MTW5zZbxa1AnOa9XVy4hg3XH7p9v3BucyRypydo-7XkMtlHGvdrInF30TIoVHE2rRxrgux_jslqK7370ij2LTsEm-QW5Q_C8HJsixICH5JvgrgTEFC1TVp_V" alt="Nebula Protocol distributed sync visualization preview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy"></div></div><div class="lg:col-span-6 lg:order-1 flex flex-col justify-center space-y-6"><div class="space-y-3"><div class="flex items-center justify-between"><div class="flex items-center gap-4"><h3 class="font-display text-headline-md text-on-surface font-light group-hover:text-primary transition-colors">Nebula Protocol</h3><span class="font-label-caps text-[10px] text-on-surface-variant/50 tracking-widest">02</span></div><div class="flex items-center gap-6 font-label-caps text-label-caps tracking-widest shrink-0"><a class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 group/link" href="#" rel="noopener noreferrer"><span class="">LIVE DEMO</span><span class="material-symbols-outlined text-[16px] transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">north_east</span></a><a class="text-on-surface-variant/60 hover:text-primary transition-colors flex items-center gap-1 group/link" href="https://github.com" rel="noopener noreferrer" target="_blank"><span class="">SOURCE</span><span class="material-symbols-outlined text-[16px] transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">north_east</span></a></div></div><p class="font-body-md text-on-surface-variant/80 max-w-2xl leading-relaxed">Distributed peer-to-peer sync engine for local-first web applications featuring optimistic conflict-free data synchronization across offline nodes.</p></div><div class="flex flex-wrap gap-3 font-label-caps text-[10px] text-on-surface-variant/70 tracking-widest pt-2"><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">React</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">Node.js</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">WebSockets</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">CRDTs</span></div></div></div></article><article class="group border-b border-outline-variant/10 pb-16 transition-colors hover:border-outline-variant/30"><div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"><div class="lg:col-span-6 overflow-hidden rounded-xl border border-white/10 bg-surface-container-lowest/50 shadow-2xl relative"><div class="aspect-video w-full overflow-hidden"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5j0W_WpcBl9aP_aJ2oAEkFc7XQKA7OzIekNKOg_MhNwKkyCh9RvNh18swccibeTCxm68REKYhbEgBx1rs60lb6Kk9e9XzTCVYgj2YvbJ3q0Kr8bOtyosdMjmqaoRbWj5OrcYjJuKt8-ZKHryGtYm0n5jTsh0dHWp6xs6x5adB0ing4dh92D0l-IQDFKZigzOB-5PG0qo29onhc0oZBK-5pHBaei1kvcxNsv56kZSmJcJRoVOPQ--I" alt="Krypton Core high-throughput telemetry pipeline dashboard preview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy"></div></div><div class="lg:col-span-6 flex flex-col justify-center space-y-6"><div class="space-y-3"><div class="flex items-center justify-between"><div class="flex items-center gap-4"><h3 class="font-display text-headline-md text-on-surface font-light group-hover:text-primary transition-colors">Krypton Core</h3><span class="font-label-caps text-[10px] text-on-surface-variant/50 tracking-widest">03</span></div><div class="flex items-center gap-6 font-label-caps text-label-caps tracking-widest shrink-0"><a class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 group/link" href="#" rel="noopener noreferrer"><span class="">LIVE DEMO</span><span class="material-symbols-outlined text-[16px] transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">north_east</span></a><a class="text-on-surface-variant/60 hover:text-primary transition-colors flex items-center gap-1 group/link" href="https://github.com" rel="noopener noreferrer" target="_blank"><span class="">SOURCE</span><span class="material-symbols-outlined text-[16px] transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">north_east</span></a></div></div><p class="font-body-md text-on-surface-variant/80 max-w-2xl leading-relaxed">High-throughput telemetry ingestion pipeline handling streaming metric aggregation, sub-millisecond query evaluation, and automated alert dispatching.</p></div><div class="flex flex-wrap gap-3 font-label-caps text-[10px] text-on-surface-variant/70 tracking-widest pt-2"><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">Python</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">PostgreSQL</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">Docker</span><span class="border border-outline-variant/20 px-3 py-1 bg-surface-container-lowest/50 rounded">FastAPI</span></div></div></div></article></div></section><section class="py-24 relative" id="skills">
+<div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps tracking-widest mb-16">
+<span class="w-8 h-[1px] bg-outline-variant/50"></span>
+<span class="">TECHNICAL TOOLKIT</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-x-8 gap-y-12">
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">html</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">HTML</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">css</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">CSS</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">javascript</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">JavaScript</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">data_object</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">TypeScript</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">code</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">React</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">terminal</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">Node.js</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">integration_instructions</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">Python</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">database</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">PostgreSQL</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">account_tree</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">Git</span>
+</div>
+<div class="flex flex-col items-center gap-4 group">
+<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors font-light">view_in_ar</span>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">Docker</span>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-24 relative" id="contact">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
+<div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps tracking-widest mb-12">
+<span class="w-8 h-[1px] bg-outline-variant/50"></span>
+<span class="">CONTACT</span>
+</div>
+<p class="font-body-lg text-on-surface-variant/80 mb-12 max-w-md leading-relaxed">
+                        Interested in working together? Drop a message.
+                    </p>
+<div class="space-y-8 font-label-caps text-label-caps tracking-widest text-on-surface">
+<a class="flex items-center gap-6 group cursor-pointer w-fit" href="https://github.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors font-light">code</span>
+<span class="group-hover:text-primary transition-colors">GitHub</span>
+</a>
+</div>
+</div>
+<div>
+<form class="space-y-12 flex flex-col">
+<div class="relative group">
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 px-0 py-4 text-on-surface focus:outline-none focus:border-primary focus:ring-0 transition-colors font-body-md placeholder:text-transparent peer" id="name" placeholder="Name" type="text">
+<label class="absolute left-0 top-4 font-label-caps text-label-caps text-on-surface-variant tracking-widest transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-primary peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-[10px]" for="name">NAME</label>
+</div>
+<div class="relative group">
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 px-0 py-4 text-on-surface focus:outline-none focus:border-primary focus:ring-0 transition-colors font-body-md placeholder:text-transparent peer" id="email" placeholder="Email" type="email">
+<label class="absolute left-0 top-4 font-label-caps text-label-caps text-on-surface-variant tracking-widest transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-primary peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-[10px]" for="email">EMAIL</label>
+</div>
+<div class="relative group">
+<textarea class="w-full bg-transparent border-0 border-b border-outline-variant/30 px-0 py-4 text-on-surface focus:outline-none focus:border-primary focus:ring-0 transition-colors font-body-md placeholder:text-transparent peer resize-none" id="message" placeholder="Message" rows="4"></textarea>
+<label class="absolute left-0 top-4 font-label-caps text-label-caps text-on-surface-variant tracking-widest transition-all peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-primary peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-[10px]" for="message">MESSAGE</label>
+</div>
+<button class="mt-8 border border-primary text-primary font-label-caps text-label-caps px-8 py-4 hover:bg-primary hover:text-on-primary transition-all duration-300 self-start tracking-widest" type="submit">
+                            SUBMIT
+                        </button>
+</form>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="relative z-10 w-full py-12 border-t border-outline-variant/10">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-stack-md">
+<div class="font-display text-label-caps font-bold tracking-widest text-on-surface-variant uppercase">ALEX</div>
+<div class="text-on-surface-variant/50 font-label-caps text-[10px] tracking-widest uppercase">
+                © 2024 Alex. All rights reserved.
+            </div>
+<div class="flex gap-8 font-label-caps text-[10px] tracking-widest uppercase">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="https://github.com" rel="noopener noreferrer" target="_blank">GitHub</a>
+</div>
+</div>
+</footer>
+</div>
+</main>
+
+
+
+
+</body></html>
